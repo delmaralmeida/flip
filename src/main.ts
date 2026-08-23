@@ -1,3 +1,4 @@
+import { ORIENTATION } from "./orientation/types";
 import { getOrientation } from "./orientation/orientation";
 import "./style.css";
 
@@ -9,15 +10,33 @@ function render(orientation: string) {
 
 window.addEventListener("deviceorientation", (event) => {
   if (event.beta === null || event.gamma === null) {
-    render("No orientation detected...");
+    render("Use a mobile device to experience this application.");
 
     return;
   }
 
   const orientation = getOrientation(event.beta, event.gamma);
 
-  render(orientation);
-  console.log(`Orientation: ${orientation}, Beta: ${event.beta}, Gamma: ${event.gamma}`)
-});
+  switch (orientation) {
+    case ORIENTATION.VERTICAL_UP:
+      app.style.backgroundColor = "green";
+      render(orientation); // render Clock
 
-console.log("Listening for device orientation events...");
+      break;
+    case ORIENTATION.VERTICAL_DOWN:
+      app.style.backgroundColor = "red";
+      render(orientation); // render Dad Joke
+
+      break;
+    case ORIENTATION.HORIZONTAL_LEFT:
+      app.style.backgroundColor = "blue";
+      render(orientation); // render Timer
+
+      break;
+    case ORIENTATION.HORIZONTAL_RIGHT:
+      app.style.backgroundColor = "yellow";
+      render(orientation); // render Weather
+
+      break;
+  }
+});
