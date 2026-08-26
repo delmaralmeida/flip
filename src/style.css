@@ -3,3 +3,8 @@
   display: grid;
   place-items: center;
 }
+
+.clock {
+  font-size: 20vw;
+  font-variant-numeric: tabular-nums;
+}
