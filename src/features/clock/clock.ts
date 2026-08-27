@@ -1,40 +1,50 @@
 /**
- * Clock class
- * It displays the current time in HH:MM format and updates every minute.
+ * Creates a clock that displays the current time in HH:MM format.
+ *
+ * @param element The HTML element where the clock will be displayed.
+ * @returns An object with start and stop methods to control the clock.
  */
-export class Clock {
-  private _timeoutId?: number;
-  private readonly _element: HTMLElement;
+export function createClock(element: HTMLElement) {
+  let timeoutId: number | undefined;
 
-  constructor(element: HTMLElement) {
-    this._element = element;  
+  function start(): void {
+    stop();
+    update();
   }
 
-  start(): void {
-    this._update();
-  }
-
-  stop(): void {
-    if (this._timeoutId !== undefined) {
-      window.clearTimeout(this._timeoutId);
-      this._timeoutId = undefined;
+  function stop(): void {
+    if (timeoutId !== undefined) {
+      window.clearTimeout(timeoutId);
+      timeoutId = undefined;
     }
   }
 
-  private _update(): void {
-    this._element.textContent = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
+  function update(): void {
+    element.textContent = formatTime(new Date());
 
     const now = new Date();
     const millisecondsUntilNextMinute =
       (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
 
-    this._timeoutId = window.setTimeout(
-      () => this._update(),
-      millisecondsUntilNextMinute,
-    );
+    timeoutId = window.setTimeout(update, millisecondsUntilNextMinute);
   }
+
+  return {
+    start,
+    stop,
+  };
+}
+
+/**
+ * Formats a date object into a time string in HH:MM format.
+ *
+ * @param date The date object to format.
+ * @returns A formatted time string.
+ */
+export function formatTime(date: Date): string {
+  return date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 }

@@ -1,10 +1,10 @@
 import { ORIENTATION } from "./orientation/types";
 import { getOrientation } from "./orientation/orientation";
-import { Clock } from "./features/clock/clock";
+import { createClock } from "./features/clock/clock";
 import "./style.css";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
-const clock = new Clock(app);
+const clock = createClock(app);
 
 window.addEventListener("deviceorientation", (event) => {
   if (handleUnsupportedDevice(event)) {
