@@ -1,6 +1,7 @@
 import { ORIENTATION } from "./orientation/types";
 import { getOrientation } from "./orientation/orientation";
 import { createClock } from "./features/clock/clock";
+import { showDadJoke } from "./features/dad-joke/dad-joke";
 import "./style.css";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
@@ -69,5 +70,5 @@ function renderTimer() {
 function renderDadJoke() {
   app.style.backgroundColor = "red";
   clock.stop();
-  render("Dad Joke");
+  showDadJoke(app);
 }
