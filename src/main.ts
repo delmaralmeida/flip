@@ -2,17 +2,26 @@ import { ORIENTATION } from "./orientation/types";
 import { getOrientation } from "./orientation/orientation";
 import { createClock } from "./features/clock/clock";
 import { showDadJoke } from "./features/dad-joke/dad-joke";
+import type { TOrientation } from "./orientation/types";
 import "./style.css";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const clock = createClock(app);
 
+let currentOrientation: TOrientation | null = null;
+
+//-- Main Feature --//
 window.addEventListener("deviceorientation", (event) => {
   if (handleUnsupportedDevice(event)) {
     return;
   }
 
   const orientation = getOrientation(event.beta!, event.gamma!);
+  if (orientation === currentOrientation) {
+    return;
+  }
+
+  currentOrientation = orientation;
 
   switch (orientation) {
     case ORIENTATION.VERTICAL_UP:
