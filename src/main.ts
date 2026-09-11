@@ -2,6 +2,7 @@ import { ORIENTATION } from "./orientation/types";
 import { getOrientation } from "./orientation/orientation";
 import { createClock } from "./features/clock/clock";
 import { showDadJoke } from "./features/dad-joke/dad-joke";
+import { showMoonPhase } from "./features/moon-phase/moon-phase";
 import type { TOrientation } from "./orientation/types";
 import "./style.css";
 
@@ -33,7 +34,7 @@ window.addEventListener("deviceorientation", (event) => {
 
       break;
     case ORIENTATION.HORIZONTAL_LEFT:
-      renderTimer();
+      renderMoonPhase();
 
       break;
     case ORIENTATION.HORIZONTAL_RIGHT:
@@ -70,10 +71,10 @@ function renderWeather() {
   render("Weather");
 }
 
-function renderTimer() {
+function renderMoonPhase() {
   app.style.backgroundColor = "blue";
   clock.stop();
-  render("Timer");
+  showMoonPhase(app);
 }
 
 function renderDadJoke() {
