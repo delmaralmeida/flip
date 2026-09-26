@@ -1,8 +1,6 @@
 import { ORIENTATION } from "./orientation/types";
 import { getOrientation } from "./orientation/orientation";
-import { createClock } from "./features/clock/clock";
-import { showDadJoke } from "./features/dad-joke/dad-joke";
-import { showMoonPhase } from "./features/moon-phase/moon-phase";
+import { createClock, showDadJoke, showMoonPhase, showWeather } from "./features";
 import type { TOrientation } from "./orientation/types";
 import "./style.css";
 
@@ -46,10 +44,6 @@ window.addEventListener("deviceorientation", (event) => {
 
 //-- Helper Functions --//
 
-function render(orientation: string) {
-  app.textContent = orientation;
-}
-
 function handleUnsupportedDevice(event: DeviceOrientationEvent): boolean {
   if (event.beta === null || event.gamma === null) {
     app.textContent = "Use a mobile device to experience this application.";
@@ -68,7 +62,7 @@ function renderClock() {
 function renderWeather() {
   app.style.backgroundColor = "yellow";
   clock.stop();
-  render("Weather");
+  showWeather(app);
 }
 
 function renderMoonPhase() {
