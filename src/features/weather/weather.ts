@@ -1,12 +1,30 @@
 import { getCities } from './locations';
 import wmoCodes from './wmo-codes.json';
 import type { IWeather } from './types';
+import type { IFeature } from '../types';
 
 const OPEN_METEO_API_URL = 'https://api.open-meteo.com/v1/forecast';
 
 /**
+ * Creates a weather feature that fetches and displays weather for a random cached city.
+ *
+ * @returns An IFeature instance.
+ */
+export function createWeatherFeature(): IFeature {
+  function start(element: HTMLElement): Promise<void> {
+    return showWeather(element);
+  }
+
+  function stop(): void {
+    // No timers or subscriptions to clear.
+  }
+
+  return { start, stop };
+}
+
+/**
  * Fetches the current weather for a specific latitude and longitude from the open-meteo API.
- * 
+ *
  * @param lat The location's latitude.
  * @param lon The location's longitude.
  * @returns An object containing the temperature and weathercode.
@@ -30,12 +48,7 @@ export async function fetchWeather(lat: number, lon: number): Promise<IWeather> 
   };
 }
 
-/**
- * Displays the weather for a random cached city in the specified HTML element.
- *
- * @param element The HTML element where the weather will be displayed.
- */
-export async function showWeather(element: HTMLElement): Promise<void> {
+async function showWeather(element: HTMLElement): Promise<void> {
   let cityName = '';
 
   try {

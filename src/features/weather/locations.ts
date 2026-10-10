@@ -17,10 +17,10 @@ export async function getCities(): Promise<ICity[]> {
   if (!response.ok) throw new Error(`Failed to fetch cities: ${response.status} ${response.statusText}`);
 
   const data = await response.json();
-  const cities: ICity[] = data.map((c: any) => ({
-    name: c.name,
-    latitude: c.latitude,
-    longitude: c.longitude
+  const cities: ICity[] = data.map((city: any) => ({
+    name: city.name,
+    latitude: city.latitude,
+    longitude: city.longitude
   }));
 
   localStorage.setItem(CITIES_CACHE_KEY, JSON.stringify(cities));

@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
-import { createClock, formatTime } from "./clock";
+import { createClockFeature, formatTime } from "./clock";
+import type { IFeature } from "../types";
 
 describe("formatTime", () => {
   it("formats time using 24-hour format", () => {
@@ -9,13 +10,13 @@ describe("formatTime", () => {
   });
 });
 
-describe("createClock", () => {
+describe("createClockFeature", () => {
   let element: HTMLDivElement;
-  let clock: ReturnType<typeof createClock>;
+  let clock: IFeature;
 
   beforeEach(() => {
     element = document.createElement("div");
-    clock = createClock(element);
+    clock = createClockFeature();
 
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 7, 23, 16, 50, 30));
@@ -26,13 +27,13 @@ describe("createClock", () => {
   });
 
   it("displays the current time when started", () => {
-    clock.start();
+    clock.start(element);
 
     expect(element.textContent).toBe("16:50");
   });
 
   it("updates when the minute changes", () => {
-    clock.start();
+    clock.start(element);
     expect(element.textContent).toBe("16:50");
 
     vi.advanceTimersByTime(30_000);
@@ -40,7 +41,7 @@ describe("createClock", () => {
   });
 
   it("stops updating when stopped", () => {
-    clock.start();
+    clock.start(element);
     clock.stop();
 
     vi.setSystemTime(new Date(2026, 7, 23, 16, 51, 30));

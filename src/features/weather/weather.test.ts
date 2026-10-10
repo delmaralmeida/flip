@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { showWeather, fetchWeather } from './weather';
+import { createWeatherFeature, fetchWeather } from './weather';
 import type { ICity, IWeather } from './types';
+import type { IFeature } from '../types';
 
 describe('fetchWeather', () => {
   beforeEach(() => {
@@ -41,8 +42,9 @@ describe('fetchWeather', () => {
   });
 });
 
-describe('showWeather', () => {
+describe('createWeatherFeature', () => {
   let element: HTMLElement;
+  let feature: IFeature;
 
   const tokyo: ICity = { name: 'Tokyo', latitude: 35.6895, longitude: 139.6917 };
   const paris: ICity = { name: 'Paris', latitude: 48.8566, longitude: 2.3522 };
@@ -59,6 +61,7 @@ describe('showWeather', () => {
     localStorage.clear();
     vi.stubGlobal('fetch', vi.fn());
     element = document.createElement('div');
+    feature = createWeatherFeature();
   });
 
   afterEach(() => {
@@ -73,7 +76,7 @@ describe('showWeather', () => {
     fetchMock.mockReturnValueOnce(new Promise(resolve => resolveCities = resolve));
     fetchMock.mockReturnValueOnce(new Promise(resolve => resolveWeather = resolve));
 
-    const promise = showWeather(element);
+    const promise = feature.start(element);
     resolveCities(new Response(JSON.stringify([london]), { status: 200 }));
     await new Promise(resolve => setTimeout(resolve, 0));
 
@@ -98,7 +101,7 @@ describe('showWeather', () => {
     let resolveWeather!: (value: Response) => void;
     vi.mocked(fetch).mockReturnValueOnce(new Promise(resolve => resolveWeather = resolve));
 
-    showWeather(element);
+    feature.start(element);
     await new Promise(resolve => setTimeout(resolve, 0));
     // skips getCities() call
     expect(getCityApiCalls()).toHaveLength(0);
@@ -115,7 +118,7 @@ describe('showWeather', () => {
       current_weather: { temperature: 10, weathercode: 999 }
     }), { status: 200 }));
 
-    await showWeather(element);
+    await feature.start(element);
 
     expect(element.textContent).toBe('Unknown conditions in Tokyo (10°C)');
   });
@@ -124,13 +127,16 @@ describe('showWeather', () => {
     vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'));
 
     // When city fetch fails
-    await showWeather(element);
+    await feature.start(element);
     expect(element.textContent).toBe("Couldn't fetch weather.");
 
     // When weather fetch fails
     cacheCities([paris]);
-    await showWeather(element);
+    await feature.start(element);
     expect(element.textContent).toBe("Couldn't fetch weather for Paris.");
   });
-});
 
+  it('stop is a no-op (stateless feature)', () => {
+    expect(() => feature.stop()).not.toThrow();
+  });
+});

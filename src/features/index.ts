@@ -1,11 +1,13 @@
-import { createClock } from './clock/clock';
-import { showDadJoke } from './dad-joke/dad-joke';
-import { showMoonPhase } from './moon-phase/moon-phase';
-import { showWeather } from './weather/weather';
+import { createClockFeature } from './clock/clock';
+import { createDadJokeFeature } from './dad-joke/dad-joke';
+import { createMoonPhaseFeature } from './moon-phase/moon-phase';
+import { createWeatherFeature } from './weather/weather';
 
 export {
-  createClock,
-  showDadJoke,
-  showMoonPhase,
-  showWeather,
+  createClockFeature,
+  createDadJokeFeature,
+  createMoonPhaseFeature,
+  createWeatherFeature,
 };
+
+export type { IFeature } from './types';

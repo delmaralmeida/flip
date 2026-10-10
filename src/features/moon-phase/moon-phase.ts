@@ -1,16 +1,24 @@
 import * as SunCalc from "suncalc";
-import { MOON_PHASES, MOON_PHASE_THRESHOLDS } from "./types";
+import { MOON_PHASES, MOON_PHASE_THRESHOLDS } from "./constants";
 import type { TMoonPhase } from "./types";
+import type { IFeature } from "../types";
 
 /**
- * Displays the current moon phase.
+ * Creates a moon phase feature that displays the current moon phase.
  *
- * @param element The HTML element where the moon phase will be displayed.
+ * @returns An IFeature instance.
  */
-export function showMoonPhase(element: HTMLElement): void {
-  const { phase } = SunCalc.getMoonIllumination(new Date());
+export function createMoonPhaseFeature(): IFeature {
+  function start(element: HTMLElement): void {
+    const { phase } = SunCalc.getMoonIllumination(new Date());
+    element.textContent = getMoonPhaseString(phase);
+  }
 
-  element.textContent = getMoonPhaseString(phase);
+  function stop(): void {
+    // No timers or subscriptions to clear.
+  }
+
+  return { start, stop };
 }
 
 /**

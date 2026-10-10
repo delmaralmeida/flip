@@ -1,14 +1,26 @@
-/**
- * Creates a clock that displays the current time in HH:MM format.
- *
- * @param element The HTML element where the clock will be displayed.
- * @returns An object with start and stop methods to control the clock.
- */
-export function createClock(element: HTMLElement) {
-  let timeoutId: number | undefined;
+import type { IFeature } from "../types";
 
-  function start(): void {
+/**
+ * Formats a date into a "HH:MM" string.
+ */
+export function formatTime(date: Date): string {
+  return date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+}
+
+/**
+ * Creates a clock feature that displays the current time in HH:MM format.
+ */
+export function createClockFeature(): IFeature {
+  let timeoutId: number | undefined;
+  let mountedElement: HTMLElement | undefined;
+
+  function start(element: HTMLElement): void {
     stop();
+    mountedElement = element;
     update();
   }
 
@@ -20,7 +32,8 @@ export function createClock(element: HTMLElement) {
   }
 
   function update(): void {
-    element.textContent = formatTime(new Date());
+    if (!mountedElement) return;
+    mountedElement.textContent = formatTime(new Date());
 
     const now = new Date();
     const millisecondsUntilNextMinute =
@@ -29,22 +42,5 @@ export function createClock(element: HTMLElement) {
     timeoutId = window.setTimeout(update, millisecondsUntilNextMinute);
   }
 
-  return {
-    start,
-    stop,
-  };
-}
-
-/**
- * Formats a date object into a time string in HH:MM format.
- *
- * @param date The date object to format.
- * @returns A formatted time string.
- */
-export function formatTime(date: Date): string {
-  return date.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
+  return { start, stop };
 }
