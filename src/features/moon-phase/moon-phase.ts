@@ -1,4 +1,5 @@
 import * as SunCalc from "suncalc";
+import { clearFeatureClass } from "../helpers";
 import { MOON_PHASES, MOON_PHASE_THRESHOLDS } from "./constants";
 import type { TMoonPhase } from "./types";
 import type { IFeature } from "../types";
@@ -9,13 +10,18 @@ import type { IFeature } from "../types";
  * @returns An IFeature instance.
  */
 export function createMoonPhaseFeature(): IFeature {
+  let mountedElement: HTMLElement | undefined;
+
   function start(element: HTMLElement): void {
     const { phase } = SunCalc.getMoonIllumination(new Date());
+
+    mountedElement = element;
+    element.className = "feature-moon-phase";
     element.textContent = getMoonPhaseString(phase);
   }
 
   function stop(): void {
-    // No timers or subscriptions to clear.
+    mountedElement = clearFeatureClass(mountedElement);
   }
 
   return { start, stop };

@@ -1,10 +1,16 @@
 #app {
+  font-size: 5vh;
   min-height: 100vh;
   display: grid;
   place-items: center;
 }
 
-.clock {
-  font-size: 20vw;
-  font-variant-numeric: tabular-nums;
+.feature-dad-joke {
+  transform: rotate(180deg);
+}
+.feature-moon-phase {
+  transform: rotate(90deg);
+}
+.feature-weather {
+  transform: rotate(-90deg);
 }

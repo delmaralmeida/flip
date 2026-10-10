@@ -34,7 +34,13 @@ describe("createMoonPhaseFeature", () => {
     }
   });
 
-  it("stop is a no-op (stateless feature)", () => {
-    expect(() => feature.stop()).not.toThrow();
+  it("handles the feature-moon-phase class on start and stop", () => {
+    vi.mocked(SunCalc.getMoonIllumination).mockReturnValue({ phase: 0, fraction: 1, angle: 0, waxing: false });
+
+    feature.start(element);
+    expect(element.className).toBe("feature-moon-phase");
+
+    feature.stop();
+    expect(element.className).toBe("");
   });
 });

@@ -1,3 +1,4 @@
+import { clearFeatureClass } from "../helpers";
 import type { IFeature } from "../types";
 
 /**
@@ -20,7 +21,10 @@ export function createClockFeature(): IFeature {
 
   function start(element: HTMLElement): void {
     stop();
+
     mountedElement = element;
+    element.className = "feature-clock";
+
     update();
   }
 
@@ -29,6 +33,8 @@ export function createClockFeature(): IFeature {
       window.clearTimeout(timeoutId);
       timeoutId = undefined;
     }
+
+    mountedElement = clearFeatureClass(mountedElement);
   }
 
   function update(): void {
@@ -36,8 +42,7 @@ export function createClockFeature(): IFeature {
     mountedElement.textContent = formatTime(new Date());
 
     const now = new Date();
-    const millisecondsUntilNextMinute =
-      (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
 
     timeoutId = window.setTimeout(update, millisecondsUntilNextMinute);
   }

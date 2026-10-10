@@ -30,6 +30,15 @@ describe("createClockFeature", () => {
     clock.start(element);
 
     expect(element.textContent).toBe("16:50");
+    expect(element.className).toBe("feature-clock");
+  });
+
+  it("handles the feature-clock class on start and stop", () => {
+    clock.start(element);
+    expect(element.className).toBe("feature-clock");
+
+    clock.stop();
+    expect(element.className).toBe("");
   });
 
   it("updates when the minute changes", () => {

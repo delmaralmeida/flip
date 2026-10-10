@@ -122,6 +122,20 @@ describe('createWeatherFeature', () => {
 
     expect(element.textContent).toBe('Unknown conditions in Tokyo (10°C)');
   });
+  
+  it('handles the feature-weather class on start and stop', async () => {
+    cacheCities([tokyo]);
+
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({
+      current_weather: { temperature: 20, weathercode: 0 }
+    }), { status: 200 }));
+
+    await feature.start(element);
+    expect(element.className).toBe('feature-weather');
+
+    feature.stop();
+    expect(element.className).toBe('');
+  });
 
   it('shows error state if city fetch fails', async () => {
     vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'));
@@ -134,9 +148,5 @@ describe('createWeatherFeature', () => {
     cacheCities([paris]);
     await feature.start(element);
     expect(element.textContent).toBe("Couldn't fetch weather for Paris.");
-  });
-
-  it('stop is a no-op (stateless feature)', () => {
-    expect(() => feature.stop()).not.toThrow();
   });
 });

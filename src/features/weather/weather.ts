@@ -1,4 +1,5 @@
 import { getCities } from './locations';
+import { clearFeatureClass } from '../helpers';
 import wmoCodes from './wmo-codes.json';
 import type { IWeather } from './types';
 import type { IFeature } from '../types';
@@ -11,12 +12,17 @@ const OPEN_METEO_API_URL = 'https://api.open-meteo.com/v1/forecast';
  * @returns An IFeature instance.
  */
 export function createWeatherFeature(): IFeature {
+  let mountedElement: HTMLElement | undefined;
+
   function start(element: HTMLElement): Promise<void> {
+    mountedElement = element;
+    element.className = "feature-weather";
+ 
     return showWeather(element);
   }
 
   function stop(): void {
-    // No timers or subscriptions to clear.
+    mountedElement = clearFeatureClass(mountedElement);
   }
 
   return { start, stop };

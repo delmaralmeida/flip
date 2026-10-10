@@ -1,3 +1,4 @@
+import { clearFeatureClass } from "../helpers";
 import type { IFeature } from "../types";
 
 const DAD_JOKE_API_URL = "https://icanhazdadjoke.com/";
@@ -25,7 +26,11 @@ export async function fetchDadJoke(): Promise<string> {
  * Creates a dad joke feature that fetches and displays a random dad joke.
  */
 export function createDadJokeFeature(): IFeature {
+  let mountedElement: HTMLElement | undefined;
+
   function start(element: HTMLElement): Promise<void> {
+    mountedElement = element;
+    element.className = "feature-dad-joke";
     element.textContent = "Loading...";
 
     return fetchDadJoke()
@@ -38,7 +43,7 @@ export function createDadJokeFeature(): IFeature {
   }
 
   function stop(): void {
-    // No timers or subscriptions to clear.
+    mountedElement = clearFeatureClass(mountedElement);
   }
 
   return { start, stop };

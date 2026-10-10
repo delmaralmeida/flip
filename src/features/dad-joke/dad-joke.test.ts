@@ -63,6 +63,18 @@ describe("createDadJokeFeature", () => {
     expect(element.textContent).toBe(mockJoke);
   });
 
+  it("handles the feature-dad-joke class on start and stop", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify({ joke: mockJoke }), { status: 200 }),
+    );
+
+    await feature.start(element);
+    expect(element.className).toBe("feature-dad-joke");
+
+    feature.stop();
+    expect(element.className).toBe("");
+  });
+
   it("shows an error when fetching fails", async () => {
     vi.spyOn(globalThis, "fetch").mockRejectedValue(
       new Error("Network error"),
@@ -70,9 +82,5 @@ describe("createDadJokeFeature", () => {
 
     await feature.start(element);
     expect(element.textContent).toBe("Couldn't fetch a joke.");
-  });
-
-  it("stop is a no-op (stateless feature)", () => {
-    expect(() => feature.stop()).not.toThrow();
   });
 });
