@@ -1,6 +1,7 @@
 # Flip
 
 Flip is a playful mobile web app that uses your phone’s orientation to switch between different tools and widgets.
+Try it at [delmaralmeida.github.io/flip/](https://delmaralmeida.github.io/flip/)
 
 ## Why I made this
 
@@ -25,3 +26,13 @@ This app uses several free APIs and libraries to power its features:
 - **[countries.dev](https://countries.dev/)** – For fetching city coordinates.
 - **[icanhazdadjoke](https://icanhazdadjoke.com/)** – For serving up a random dad joke.
 - **[SunCalc](https://github.com/mourner/suncalc)** – For calculating the current moon phase.
+
+## Running locally
+
+```
+npm install
+npm run dev
+open http://localhost:5173/flip/
+```
+
+Flip was built for phones. On desktop, turn fake orientation in **Chrome DevTools** > **More tools** > **Sensors**.
